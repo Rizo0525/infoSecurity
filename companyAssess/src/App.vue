@@ -6,7 +6,9 @@
       </el-aside>
       <el-container>
         <el-header>Header</el-header>
-        <el-main>Main</el-main>
+        <el-main>
+          <assess_obj_grid></assess_obj_grid>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -14,10 +16,12 @@
 
 <script>
 import Menu from "./components/Menu.vue";
+import AssessObjGrid from './components/AssessObjGrid.vue'
 export default {
   name: 'app',
   components: {
-      nav_menu:Menu
+      nav_menu:Menu,
+      assess_obj_grid:AssessObjGrid
   }
 }
 </script>
