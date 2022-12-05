@@ -12,7 +12,11 @@
     <el-table-column label="Name" property="name" width="120"></el-table-column>
     <el-table-column label="Address" property="address" show-overflow-tooltip></el-table-column>
     <el-table-column label="Operation">
-      <template #default></template>
+      <template #default>
+        <el-icon>
+          <Delete />
+        </el-icon>
+      </template>
 
     </el-table-column>
   </el-table>

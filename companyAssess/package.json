@@ -8,6 +8,7 @@
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
     "element-plus": "^2.2.22",
     "element-ui": "^2.4.5",
     "vue": "^3.2.38",
