@@ -9,7 +9,8 @@
           <userlogout></userlogout>
         </el-header>
         <el-main>
-          <assess_obj_grid></assess_obj_grid>
+<!--          <assess_obj_grid></assess_obj_grid>-->
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -20,13 +21,20 @@
 import Menu from "../components/Menu.vue";
 import AssessObjGrid from '../components/AssessObjGrid.vue'
 import UserLogout from "../components/UserLogout.vue"
+import {useRouter} from "vue-router";
+
 export default {
   name: 'contentview',
+  setup(){
+    const router = useRouter()
+    router.push("/content/assestment")
+  },
   components: {
     nav_menu:Menu,
-    assess_obj_grid:AssessObjGrid,
+    // assess_obj_grid:AssessObjGrid,
     userlogout:UserLogout
-  }
+  },
+
 }
 </script>
 

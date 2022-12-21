@@ -10,7 +10,7 @@
       >
         <el-menu-item index="1">
           <template #title>
-            <span>首页</span>
+            <router-link to="/content/homepage" exact>首页</router-link>
           </template>
         </el-menu-item>
         <el-sub-menu index="1">
@@ -19,7 +19,9 @@
           </template>
           <el-menu-item index="1-1">用户管理</el-menu-item>
           <el-menu-item index="1-2">风险管理</el-menu-item>
-          <el-menu-item index="1-3">评估对象管理</el-menu-item>
+          <el-menu-item index="1-3">
+            <router-link to="/content/assestment"><span>评估对象管理</span></router-link>
+          </el-menu-item>
           <el-menu-item index="1-4">资产管理</el-menu-item>
           <el-menu-item index="1-5">威胁性管理</el-menu-item>
           <el-menu-item index="1-6">脆弱性管理</el-menu-item>
@@ -55,4 +57,17 @@ h2{
   padding: 10px;
   text-align: center;
 }
+.router-link-active{
+  text-decoration: none;
+  /*color: #409eff;*/
+  height: 100%;
+  width: 100%;
+}
+a{
+  text-decoration: none;
+  /*color: #409eff;*/
+  height: 100%;
+  width: 100%;
+}
+
 </style>

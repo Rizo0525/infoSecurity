@@ -19,7 +19,17 @@ const router = createRouter({
     {
       path:"/content",
       name:"content",
-      component:()=>import("../views/ContentView.vue")
+      component:()=>import("../views/ContentView.vue"),
+      children:[
+        {
+          path:"homepage",
+          component:()=>import("../components/HomePage.vue")
+        },
+        {
+          path:'assestment',
+          component:()=>import("../components/AssessObjGrid.vue")
+        }
+      ]
     }
   ],
 });
