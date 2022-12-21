@@ -10,21 +10,21 @@
       >
         <el-menu-item index="1">
           <template #title>
-            <router-link to="/content/homepage" exact>首页</router-link>
+            <router-link to="/content/homepage" exact><el-icon><HomeFilled /></el-icon>首页</router-link>
           </template>
         </el-menu-item>
         <el-sub-menu index="1">
           <template #title>
-            <span>业务管理</span>
+            <span><el-icon><Guide /></el-icon>业务管理</span>
           </template>
-          <el-menu-item index="1-1">用户管理</el-menu-item>
-          <el-menu-item index="1-2">风险管理</el-menu-item>
+          <el-menu-item index="1-1"><el-icon><User /></el-icon>用户管理</el-menu-item>
+          <el-menu-item index="1-2"><el-icon><Failed /></el-icon>风险管理</el-menu-item>
           <el-menu-item index="1-3">
-            <router-link to="/content/assestment"><span>评估对象管理</span></router-link>
+            <router-link to="/content/assestment"><el-icon><Operation /></el-icon><span>评估对象管理</span></router-link>
           </el-menu-item>
-          <el-menu-item index="1-4">资产管理</el-menu-item>
-          <el-menu-item index="1-5">威胁性管理</el-menu-item>
-          <el-menu-item index="1-6">脆弱性管理</el-menu-item>
+          <el-menu-item index="1-4"><el-icon><Coin /></el-icon>资产管理</el-menu-item>
+          <el-menu-item index="1-5"><el-icon><BellFilled /></el-icon>威胁性管理</el-menu-item>
+          <el-menu-item index="1-6"><el-icon><Cpu /></el-icon>脆弱性管理</el-menu-item>
 <!--          <el-sub-menu index="1-4">-->
 <!--            <template #title><span>item-Four</span></template>-->
 <!--            <el-menu-item index="1-4-1">item-Four-one</el-menu-item>-->
@@ -59,12 +59,14 @@ h2{
 }
 .router-link-active{
   text-decoration: none;
+  color: #303133;
   /*color: #409eff;*/
   height: 100%;
   width: 100%;
 }
 a{
   text-decoration: none;
+  color: #303133;
   /*color: #409eff;*/
   height: 100%;
   width: 100%;

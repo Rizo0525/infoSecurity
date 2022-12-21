@@ -23,6 +23,8 @@ export default {
       let value = ''
       document.cookie = `username=${escape(value)};expires=${date.toGMTString()};path=/`
       document.cookie = `password=${escape(value)};expires=${date.toGMTString()};path=/`
+      document.cookie = `NSESSIONID=${escape(value)};expires=${date.toGMTString()};path=/`
+
       this.$router.push("/login")
     }
   }

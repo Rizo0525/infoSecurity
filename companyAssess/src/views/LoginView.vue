@@ -41,7 +41,8 @@ export default {
   setup(){
     const store = accountStore()
     const router = useRouter()
-    if(document.cookie!==""){
+    // console.log(document.cookie.trim().split(';').toString().search("username") !== 0);
+    if(document.cookie!=""){
       /*
       清理
       let date = new Date()
@@ -51,7 +52,9 @@ export default {
         document.cookie = `password=${escape(value)};expires=${date.toGMTString()};path=/`
         console.log(document.cookie);
        */
-      store.alterUserName(document.cookie.trim().split(';')[0].split('=')[1])
+      console.log(document.cookie.trim().split(';')[1].trim().split("=")[1]);
+
+      store.alterUserName(document.cookie.trim().split(';')[1].trim().split("=")[1])
 
       router.push("/content")
       console.log(document.cookie.trim().split(';')[0].split('=')[1]);
@@ -86,7 +89,7 @@ export default {
       }else{
         document.querySelector('.err-password').innerHTML = ''
         document.querySelector('.err-username').innerHTML = ''
-        let url = `http://localhost:3000/user/login?account=${username}&password=${pass}`
+        let url = `/api/user/login?account=${username}&password=${pass}`
         fetch(url,{
           method:'get'
         }).then((res)=>{

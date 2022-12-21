@@ -51,7 +51,7 @@ export default {
         document.querySelector('.err-username').innerHTML = ''
         document.querySelector('.confirm-pas>p').innerHTML = ''
         document.querySelector('.register-pas>p').innerHTML = ''
-        let url = `http://localhost:3000/user/register?account=${username}&password1=${pwd1}&password2=${pwd2}`
+        let url = `/api/user/register?account=${username}&password1=${pwd1}&password2=${pwd2}`
         fetch(url,{
           method:'get'
         }).then((res)=>{

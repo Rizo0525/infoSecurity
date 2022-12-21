@@ -7,11 +7,13 @@
       style="width:100%"
   >
     <el-table-column type="selection" width="55"></el-table-column>
-    <el-table-column label="Date" width="120">
+    <el-table-column label="id" width="120">
+<!--      {{date}}-->
       <template #default="scope">{{ scope.row.date }}</template>
+<!--      {{assessment.id}}-->
     </el-table-column>
-    <el-table-column label="Name" property="name" width="120"></el-table-column>
-    <el-table-column label="Address" property="address" show-overflow-tooltip></el-table-column>
+<!--    <el-table-column label="Name" property="" width="120">{{assessment.name}}</el-table-column>-->
+<!--    <el-table-column label="note" property="" show-overflow-tooltip>{{assessment.note}}</el-table-column>-->
     <el-table-column label="Operation">
 
       <template #default>
@@ -38,50 +40,43 @@ interface User{
   name:string,
   address:string
 }
-const tableData:User[] = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-08',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-06',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-]
-let url = `http://localhost:3000/permission/queryAll`
+
+let url = `/api/permission/queryAll`
 fetch(url,{
-  method:'get'
+  method:'get',
+  credentials: 'include',
 }).then((res)=>{
   if(res.status===200){
-    console.log(res.text());
+    // console.log(res.json());
+    // console.log(JSON.stringify(res.text()));
+    return res.json()
   }
+}).then((res)=>{
+  console.log(res.message);
+  // const tableData:User[] = res.message
+  const tableData = [
+    {
+      date: '2016-05-03',
+      name: 'Tom',
+      address: 'No. 189, Grove St, Los Angeles',
+    },
+    {
+      date: '2016-05-02',
+      name: 'Tom',
+      address: 'No. 189, Grove St, Los Angeles',
+    },
+    {
+      date: '2016-05-04',
+      name: 'Tom',
+      address: 'No. 189, Grove St, Los Angeles',
+    },
+    {
+      date: '2016-05-01',
+      name: 'Tom',
+      address: 'No. 189, Grove St, Los Angeles',
+    },
+  ]
+  console.log(tableData);
 })
 </script>
 
