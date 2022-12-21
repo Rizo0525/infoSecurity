@@ -6,8 +6,13 @@
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
-          default-active="1-4-1"
+          default-active="1"
       >
+        <el-menu-item index="1">
+          <template #title>
+            <span>首页</span>
+          </template>
+        </el-menu-item>
         <el-sub-menu index="1">
           <template #title>
             <span>业务管理</span>
@@ -29,6 +34,7 @@
       </el-menu>
     </el-col>
   </el-row>
+
 </template>
 
 <script>

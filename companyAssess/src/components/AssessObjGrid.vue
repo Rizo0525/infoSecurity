@@ -1,5 +1,5 @@
 <template>
-
+<div ref="tableObj">
   <el-table
       ref="multipleTableRef"
       :data="tableData"
@@ -20,6 +20,14 @@
 
     </el-table-column>
   </el-table>
+  <el-pagination
+      :page-size="20"
+      :pager-count="11"
+      layout="prev, pager, next"
+      :total="1000"
+  />
+</div>
+
 </template>
 
 <script lang="ts" setup>
@@ -69,5 +77,8 @@ const tableData:User[] = [
 </script>
 
 <style scoped>
-
+.el-pagination{
+  position: absolute;
+  left: 50%;
+}
 </style>
