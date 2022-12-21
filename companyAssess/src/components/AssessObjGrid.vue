@@ -1,5 +1,6 @@
 <template>
 <div ref="tableObj">
+  <el-button type="primary">添加评估对象</el-button>
   <el-table
       ref="multipleTableRef"
       :data="tableData"
@@ -12,10 +13,11 @@
     <el-table-column label="Name" property="name" width="120"></el-table-column>
     <el-table-column label="Address" property="address" show-overflow-tooltip></el-table-column>
     <el-table-column label="Operation">
+
       <template #default>
-        <el-icon>
-          <Delete />
-        </el-icon>
+        <el-icon @click="edit" size="20"><Edit /></el-icon>
+        <el-icon @click="del" size="20" style="margin-left: 10px;margin-right: 10px"><Delete /></el-icon>
+        <el-icon @click="addUser" size="20"><User /></el-icon>
       </template>
 
     </el-table-column>
@@ -73,7 +75,14 @@ const tableData:User[] = [
     address: 'No. 189, Grove St, Los Angeles',
   },
 ]
-
+let url = `http://localhost:3000/permission/queryAll`
+fetch(url,{
+  method:'get'
+}).then((res)=>{
+  if(res.status===200){
+    console.log(res.text());
+  }
+})
 </script>
 
 <style scoped>
@@ -81,4 +90,5 @@ const tableData:User[] = [
   position: absolute;
   left: 50%;
 }
+
 </style>
