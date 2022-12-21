@@ -40,8 +40,9 @@ export default {
   height: 100vh;
 }
 .el-header{
-  background: blueviolet;
+  /*background: blueviolet;*/
   padding: 0;
+  border-bottom: 10px solid #f2f2f2;
 }
 .el-main{
   padding: 0;

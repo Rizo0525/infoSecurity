@@ -51,6 +51,7 @@ export default {
         document.cookie = `password=${escape(value)};expires=${date.toGMTString()};path=/`
         console.log(document.cookie);
        */
+      store.alterUserName(document.cookie.trim().split(';')[0].split('=')[1])
 
       router.push("/content")
       console.log(document.cookie.trim().split(';')[0].split('=')[1]);
