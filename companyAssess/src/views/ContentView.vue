@@ -10,7 +10,7 @@
         </el-header>
         <el-main>
 <!--          <assess_obj_grid></assess_obj_grid>-->
-          <router-view></router-view>
+            <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import Menu from "../components/Menu.vue";
+import Menu from "../components/manage.vue";
 import AssessObjGrid from '../components/AssessObjGrid.vue'
 import UserLogout from "../components/UserLogout.vue"
 import {useRouter} from "vue-router";

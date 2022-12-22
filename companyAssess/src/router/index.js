@@ -28,6 +28,10 @@ const router = createRouter({
         {
           path:'assestment',
           component:()=>import("../components/AssessObjGrid.vue")
+        },
+        {
+          path:"manage",
+          component:()=>import("../components/manage.vue")
         }
       ]
     }
