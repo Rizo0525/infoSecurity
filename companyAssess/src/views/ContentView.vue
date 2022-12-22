@@ -1,9 +1,9 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside width="200px">
-        <nav_menu></nav_menu>
-      </el-aside>
+<!--      <el-aside width="200px">-->
+<!--        <nav_menu></nav_menu>-->
+<!--      </el-aside>-->
       <el-container>
         <el-header>
           <userlogout></userlogout>
@@ -53,6 +53,6 @@ export default {
   border-bottom: 10px solid #f2f2f2;
 }
 .el-main{
-  padding: 0;
+  padding: 10px;
 }
 </style>

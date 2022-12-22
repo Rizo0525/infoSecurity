@@ -1,47 +1,24 @@
 <template>
 <div ref="tableObj">
-  <el-button type="primary">添加评估对象</el-button>
-  <el-table
-      ref="multipleTableRef"
-      :data="tableData"
-      style="width:100%"
-  >
-    <el-table-column type="selection" width="55"></el-table-column>
-    <el-table-column label="id" width="120">
-<!--      {{date}}-->
-      <template #default="scope">{{ scope.row.date }}</template>
-<!--      {{assessment.id}}-->
-    </el-table-column>
-<!--    <el-table-column label="Name" property="" width="120">{{assessment.name}}</el-table-column>-->
-<!--    <el-table-column label="note" property="" show-overflow-tooltip>{{assessment.note}}</el-table-column>-->
-    <el-table-column label="Operation">
-
-      <template #default>
-        <el-icon @click="edit" size="20"><Edit /></el-icon>
-        <el-icon @click="del" size="20" style="margin-left: 10px;margin-right: 10px"><Delete /></el-icon>
-        <el-icon @click="addUser" size="20"><User /></el-icon>
-      </template>
-
-    </el-table-column>
+  <el-table :data="tableData" style="width: 100%">
+    <el-table-column prop="assessment.id" label="id" width="180" />
+    <el-table-column prop="assessment.name" label="Name" width="180" />
+    <el-table-column prop="assessment.note" label="Address" width="180"/>
+    <el-table-column prop="assessment.status" label="Address" />
   </el-table>
-  <el-pagination
-      :page-size="20"
-      :pager-count="11"
-      layout="prev, pager, next"
-      :total="1000"
-  />
+  <div class="example-pagination-block">
+    <el-pagination layout="prev, pager, next" :total="tableData.size" />
+  </div>
 </div>
 
 </template>
 
 <script lang="ts" setup>
-interface User{
-  date:string,
-  name:string,
-  address:string
-}
+import {reactive, toRefs, watch,ref} from "vue";
 
+const tableData = ref()
 let url = `/api/permission/queryAll`
+
 fetch(url,{
   method:'get',
   credentials: 'include',
@@ -52,38 +29,24 @@ fetch(url,{
     return res.json()
   }
 }).then((res)=>{
-  console.log(res.message);
-  // const tableData:User[] = res.message
-  const tableData = [
-    {
-      date: '2016-05-03',
-      name: 'Tom',
-      address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-      date: '2016-05-02',
-      name: 'Tom',
-      address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-      date: '2016-05-04',
-      name: 'Tom',
-      address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-      date: '2016-05-01',
-      name: 'Tom',
-      address: 'No. 189, Grove St, Los Angeles',
-    },
-  ]
-  console.log(tableData);
+  // console.log(res);
+  // console.log(res.message);
+  // tableData.value = reactive(res.message)
+  tableData.value = res.message
+  console.log(tableData.value);
+  console.log(tableData.value.length);
 })
 </script>
 
 <style scoped>
-.el-pagination{
-  position: absolute;
-  left: 50%;
+.el-table{
+  max-height: 90%;
+  /*height: 100px;*/
 }
-
+.dialog-footer button:first-child {
+  margin-right: 10px;
+}
+.example-pagination-block .example-demonstration {
+  margin-bottom: 16px;
+}
 </style>
