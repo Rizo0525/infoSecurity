@@ -115,7 +115,7 @@ const form = reactive({
   state: 0
 })
 const handleAddComfirm = ()=>{
-  console.log(form.name);
+  // console.log(form.name);
   tableData.value.push({
     assessment:{
       id:tableData.value[tableData.value.length-1].assessment.id+1,
@@ -151,10 +151,11 @@ const handleEdit = (scope) => {
   scope.row.showbtn = true
 }
 const handleSave = (scope)=>{
-  console.log(scope.row.assessment.name);
-  console.log(scope.row.assessment.note);
+  // console.log(scope.row.assessment.name);
+  console.log(scope.row.assessment.id);
+
   //存数据库
-  fetch(`/api/assessment/alter?name=${scope.row.assessment.name}&note=${scope.row.assessment.note}`,{
+  fetch(`/api/assessment/alter?proid=${scope.row.assessment.id}&name=${scope.row.assessment.name}&note=${scope.row.assessment.note}`,{
     method:'get',
     credentials: 'include',
   }).then((res)=>{
@@ -207,7 +208,7 @@ fetch(url,{
   // console.log(tableData.value);
   // console.log(tableData.value.length);
   len.value = tableData.value.length
-  console.log(tableData.value);
+  // console.log(tableData.value);
 })
 </script>
 

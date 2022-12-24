@@ -46,6 +46,8 @@ declare module '@vue/runtime-core' {
     Menu: typeof import('./src/components/Menu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Threatenmanage: typeof import('./src/components/threatenmanage.vue')['default']
     UserLogout: typeof import('./src/components/UserLogout.vue')['default']
+    Vulnermanage: typeof import('./src/components/vulnermanage.vue')['default']
   }
 }

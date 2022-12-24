@@ -1,11 +1,17 @@
 <template>
   <div class="assetmg">
-    <el-button
-        type="primary"
-        @click="handleAdd()"
-        style="margin-bottom: 10px"
-    >添加单个资产</el-button
-    >
+    <div class="leftBtn">
+      <el-button
+          type="primary"
+          @click="handleAdd()"
+          style="margin-bottom: 10px"
+      >添加单个资产</el-button
+      >
+    </div>
+    <div class="rightBtn">
+      <el-button :icon="UploadFilled">上传文件</el-button>
+      <el-button :icon="EditPen">计算</el-button>
+    </div>
     <el-table :data="tableData" style="width: 100%" border>
       <el-table-column prop="id" label="资产序号" width="100"/>
       <el-table-column  label="资产类型" width="100">
@@ -86,14 +92,7 @@
               </span>
         </template>
       </el-table-column>
-      <el-table-column prop="assessment.status" label="状态" >
-        <template #default="scope">
-              <span v-show="scope.row.showinput">
-                <el-input v-model="scope.row.assessment.status"></el-input>
-              </span>
-          <span v-show="!scope.row.showinput">{{scope.row.assessment.status}}</span>
-        </template>
-      </el-table-column>
+
       <el-table-column>
         <template #header>
           <el-input v-model="search" size="small" placeholder="Type to search" />
@@ -121,26 +120,121 @@
       <el-pagination layout="prev, pager, next" :total="len" />
     </div>
   </div>
-
+  <el-dialog v-model="dialogFormVisible" title="添加单个资产对象">
+    <el-form :model="form" ref="assetform">
+      <el-form-item label="数据类型" :label-width="formLabelWidth" prop="type">
+        <el-input v-model="form.type" autocomplete="off" clearable/>
+      </el-form-item>
+      <el-form-item label="资产名称" :label-width="formLabelWidth" prop="name">
+        <el-input v-model="form.name" autocomplete="off" clearable/>
+      </el-form-item>
+      <el-form-item label="资产责任人" :label-width="formLabelWidth" prop="person">
+        <el-input v-model="form.person" autocomplete="off" clearable/>
+      </el-form-item>
+      <el-form-item label="资产保密性" :label-width="formLabelWidth" prop="secrety">
+        <el-input v-model="form.secrety" autocomplete="off" clearable/>
+      </el-form-item>
+      <el-form-item label="资产完整性" :label-width="formLabelWidth" prop="wholeness">
+        <el-input v-model="form.wholeness" autocomplete="off" clearable/>
+      </el-form-item>
+      <el-form-item label="资产可用性" :label-width="formLabelWidth" prop="availability">
+        <el-input v-model="form.availability" autocomplete="off" clearable/>
+      </el-form-item>
+      <el-form-item label="资产重要性" :label-width="formLabelWidth" prop="importance">
+        <el-input v-model="form.importance" autocomplete="off" clearable/>
+      </el-form-item>
+      <el-form-item label="资产备注" :label-width="formLabelWidth" prop="note">
+        <el-input v-model="form.note" autocomplete="off" clearable/>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false,handleAddComfirm()">
+          Confirm
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
-// export default {
-//   name: "assestmanage"
-// }
-import {ref} from "vue";
-import {projectStore} from "../stores/project";
-const proStore = projectStore()
 
+import {ref, reactive, onMounted, nextTick} from "vue";
+import {projectStore} from "../stores/project";
+import {EditPen,UploadFilled} from "@element-plus/icons-vue"
+import {useRouter} from "vue-router";
+const router = useRouter()
+const proStore = projectStore()
+const dialogFormVisible = ref(false)
 const tableData = ref()
 const len = ref()
+const assetform = ref(null)
+const form = reactive({
+  id: null,
+  type:'',
+  name: '',
+  person:'',
+  note: '',
+  secrety:null,
+  wholeness:null,
+  availability:null,
+  importance:null,
+  status: 0,
+  assessment:{}
+})
 const handleEdit = (scope) => {
   //出现input框
   scope.row.showinput = true
   scope.row.showbtn = true
 }
+
+const handleAdd = ()=>{
+  dialogFormVisible.value = true
+}
+const handleAddComfirm = ()=>{
+  tableData.value.push({
+    id: tableData.value[tableData.value.length-1].id+1,
+    type:form.type,
+    name: form.name,
+    person:form.person,
+    note: form.note,
+    secrety:form.secrety,
+    wholeness:form.wholeness,
+    availability:form.availability,
+    importance:form.importance,
+    status: 0,
+    assessment:{}
+  })
+
+  // console.log("form",form);
+  // form.id = tableData.value[tableData.value.length-1].id+1
+  // console.log(form.id);
+  // console.log("tableData",tableData.value);
+
+  fetch(`/api/assets/add?type=${form.type}&name=${form.name}&person=${form.person}
+  &secrety=${form.secrety}&wholeness=${form.wholeness}&availability=${form.availability}
+  &importance=${form.importance}&note=${form.note}&proid=${proStore.proId}`,{
+    method:'get',
+    credentials: 'include',
+  }).then((res)=>{
+    if(res.status===200){
+      // assetform.value.resetFields()
+      //提示添加成功
+      form.name = ''
+      form.note = ''
+      form.type = ''
+      form.person = ''
+      form.secrety = null
+      form.wholeness = null
+      form.availability = null
+      form.importance = null
+    }
+  })
+
+}
 const handleSave = (scope)=>{
-  console.log(scope.row);
+  // console.log(scope.row);
   //存数据库
   fetch(`/api/assets/alter?type=${scope.row.type}&name=${scope.row.name}&person=${scope.row.person}
   &secrety=${scope.row.secrety}&wholeness=${scope.row.wholeness}&availability=${scope.row.availability}
@@ -157,10 +251,12 @@ const handleSave = (scope)=>{
     }
   })
 }
-
 const handleDelete = (scope) => {
+
   //tableD
-  fetch(`/api/assets/delete?name=${scope.row.assessment.name}&proid=${proStore.proid}`,{
+  // console.log(scope.row.id);
+  // console.log(proStore.proId);
+  fetch(`/api/assets/delete?id=${scope.row.id}&proid=${proStore.proId}`,{
     method:'get',
     credentials: 'include',
   }).then((res)=>{
@@ -185,9 +281,18 @@ fetch(`/api/assets/queryAll?proid=${proStore.proId}`,{
 }).then((res)=>{
   tableData.value = res.message
   len.value = tableData.value.length
+  // console.log(tableData.value);
 })
 </script>
 
 <style scoped>
-
+.leftBtn{
+  float: left;
+}
+.rightBtn{
+  float: right;
+}
+.el-pagination{
+  float: right;
+}
 </style>
