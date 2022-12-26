@@ -59,15 +59,17 @@
         </template>
         <template #default="scope">
           <div v-show="!scope.row.showbtn">
-            <el-button size="small" @click="handleEdit(scope)"
+            <el-button size="small" @click="handleEdit(scope)" v-show="proStore.level===1?false:true"
             >Edit</el-button
             >
             <el-button
                 size="small"
                 type="danger"
                 @click="handleDelete(scope)"
+                v-show="proStore.level==3?true:false"
             >Delete</el-button
             >
+            <span v-show="proStore.level==1?true:false">不能进行任何操作</span>
           </div>
           <div v-show="scope.row.showbtn">
             <el-button size="small" type="danger" @click="handleSave(scope)">save</el-button>

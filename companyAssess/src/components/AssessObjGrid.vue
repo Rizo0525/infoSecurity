@@ -55,7 +55,6 @@
             >
             <span v-show="scope.row.level==1?true:false">不能进行任何操作</span>
           </div>
-
           <div v-show="scope.row.showbtn">
             <el-button size="small" type="danger" @click="handleSave(scope)">save</el-button>
             <el-button size="small" type="warning" @click="handleCancel(scope)">cancel</el-button>
@@ -87,16 +86,75 @@
   <el-dialog v-model="dialogFormVisible1" title="协作人管理">
     <el-form :model="colborateForm">
       <el-form-item label="评估对象名称" :label-width="formLabelWidth">
-        <el-input v-model="colborateForm.name" autocomplete="off" clearable/>
+<!--        <el-input v-model="colborateForm.name" autocomplete="off" clearable/>-->
+        <span>{{colborateForm.assessment.name}}</span>
       </el-form-item>
       <el-form-item label="当前已有协作人" :label-width="formLabelWidth">
-        <el-input v-model="colborateForm.cob" clearable/>
+        <el-table :data="colborator" style="width: 100%" border height="150">
+<!--          <el-table-column prop="user.id" label="用户序号"/>-->
+          <el-table-column  label="用户等级">
+            <template #default="scope">
+              <span v-show="scope.row.showinput1">
+                <el-input v-model="scope.row.level"></el-input>
+              </span>
+              <span v-show="!scope.row.showinput1">
+                <span>{{scope.row.level}}</span>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column  label="用户名">
+            <template #default="scope">
+              <span>{{scope.row.user.username}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column width="180">
+            <template #header>
+              <el-input v-model="search" size="small" placeholder="Type to search" />
+            </template>
+            <template #default="scope">
+              <div v-show="!scope.row.showbtn1">
+                <el-button size="small" @click="handleEdit1(scope)" v-show="scope.row.level===3?false:true"
+                >Edit</el-button
+                >
+                <el-button
+                           size="small"
+                           type="danger"
+                           @click="handleDelete1(scope)"
+                           v-show="scope.row.level===3?false:true"
+                >Delete</el-button
+                >
+                <span v-show="scope.row.level===3?true:false">无法操作</span>
+              </div>
+              <div v-show="scope.row.showbtn1">
+                <el-button size="small" type="danger" @click="handleSave1(scope)">save</el-button>
+                <el-button size="small" type="warning" @click="handleCancel1(scope)">cancel</el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
+      <el-form-item label="添加用户" :label-width="formLabelWidth">
+        <el-row :gutter="24">
+          <el-col span="8">
+            <el-input v-model="colborateForm.level" autocomplete="off" clearable placeholder="输入添加用户等级<3"/>
+          </el-col>
+          <el-col span="8">
+            <el-input v-model="colborateForm.user.username" autocomplete="off" clearable placeholder="输入添加用户名"/>
+          </el-col>
+          <el-col span="8">
+            <el-button type="primary" @click="addUserLevel()">
+              添加
+            </el-button>
+          </el-col>
+        </el-row>
+
+<!--        <span>{{colborateForm.name}}</span>-->
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible1 = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible1 = false,handleAddComfirm1()">
+        <el-button type="primary" @click="dialogFormVisible1 = false">
           Confirm
         </el-button>
       </span>
@@ -114,11 +172,11 @@ import {useRouter} from "vue-router";
 const proStore = projectStore()
 const router = useRouter()
 const tableData = ref()
+const colborator = ref()
 const len = ref()
 const search = ref('')
 const dialogFormVisible = ref(false)
 const dialogFormVisible1 = ref(false)
-const optionshow = ref(false)
 const formLabelWidth = '140px'
 
 
@@ -137,14 +195,61 @@ const form = reactive({
   state: 0
 })
 const colborateForm = reactive({
-  name:'',
+  id:'',
   cob:'',
+  level:null,
+  status:0,
+  user:{
+    id:null,
+    username:''
+  },
+  assessment:{
+    name:''
+  }
 })
+const addUserLevel = ()=>{
+  console.log(colborateForm.assessment.name);
+  console.log(colborateForm.level);
+  console.log(colborateForm.user.username);
+  fetch(`/api/assessment/addMembers?name=${colborateForm.assessment.name}
+  &username=${colborateForm.user.username}&memberlevel=${colborateForm.level}`,{
+    method:'get',
+    credentials: 'include',
+  }).then((res)=>{
+    if(res.status===200){
+      //提示添加成功
+      colborator.value.push({
+        id:'',
+        cob:'',
+        level:colborateForm.level,
+        status:0,
+        user:{
+          id:null,
+          username:colborateForm.user.username
+        },
+        assessment:{
+          name:colborateForm.assessment.name
+        }
+      })
+    }
+  })
+}
 const addUser = (scope)=>{
   // console.log(scope.row.assessment.name);
-  colborateForm.name = scope.row.assessment.name
-  colborateForm.name
+  colborateForm.assessment.name = scope.row.assessment.name
+  console.log(scope.row.assessment.id);
   dialogFormVisible1.value = true
+  fetch(`/api/permission/queryAllHelper?proid=${scope.row.assessment.id}`,{
+    method:'get',
+    credentials: 'include',
+  }).then((res)=>{
+    return res.json()
+  }).then((res)=>{
+    if(res.result==="请求成功"){
+      console.log(res.message);
+      colborator.value = res.message
+    }
+  })
 }
 const handleAddComfirm = ()=>{
   // console.log(form.name);
@@ -196,6 +301,10 @@ const handleAddComfirm = ()=>{
   })
 
 }
+const handleEdit1 = (scope) => {
+  scope.row.showinput1 = true
+  scope.row.showbtn1 = true
+}
 const handleEdit = (scope) => {
   //出现input框
   scope.row.showinput = true
@@ -218,7 +327,23 @@ const handleSave = (scope)=>{
     }
   })
 }
-
+const handleSave1 = (scope)=>{
+  console.log(scope.row.assessment.id);
+  console.log(scope.row.id);
+  console.log(scope.row.level);
+  fetch(`/api/permission/alter?proid=${scope.row.assessment.id}&id=${scope.row.id}
+  &memberlevel=${scope.row.level}`,{
+    method:'get',
+    credentials: 'include',
+  }).then((res)=>{
+    if(res.status===200){
+      //提示保存成功
+      scope.row.showinput1 = false
+      scope.row.showbtn1 = false
+      console.log("保存成功");
+    }
+  })
+}
 const handleDelete = (scope) => {
   //tableD
   fetch(`/api/assessment/delete?name=${scope.row.assessment.name}`,{
@@ -230,13 +355,30 @@ const handleDelete = (scope) => {
       tableData.value.splice(scope.$index,1)
     }
   })
-
-
+  //删除
+}
+const handleDelete1 = (scope) => {
+  console.log(scope.row.assessment.id);
+  console.log(scope.row.id);
+  //tableD
+  fetch(`/api/permission/delete?proid=${scope.row.assessment.id}&id=${scope.row.id}`,{
+    method:'get',
+    credentials: 'include',
+  }).then((res)=>{
+    if(res.status===200){
+      //提示删除成功
+      colborator.value.splice(scope.$index,1)
+    }
+  })
   //删除
 }
 const handleCancel = (scope)=>{
   scope.row.showinput = false
   scope.row.showbtn = false
+}
+const handleCancel1 = (scope)=>{
+  scope.row.showinput1 = false
+  scope.row.showbtn1 = false
 }
 const handleAdd = ()=>{
   dialogFormVisible.value = true

@@ -71,7 +71,6 @@
             >Delete</el-button
             >
             <span v-show="proStore.level==1?true:false">不能进行任何操作</span>
-
           </div>
           <div v-show="scope.row.showbtn">
             <el-button size="small" type="danger" @click="handleSave(scope)">save</el-button>
@@ -121,7 +120,6 @@ const proStore = projectStore()
 const dialogFormVisible = ref(false)
 const tableData = ref()
 const len = ref()
-const assetform = ref(null)
 const form = reactive({
   id: null,
   type: '',
