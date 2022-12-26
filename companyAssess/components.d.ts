@@ -9,6 +9,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AssessObjGrid: typeof import('./src/components/AssessObjGrid.vue')['default']
     Assestmanage: typeof import('./src/components/assestmanage.vue')['default']
+    Asset: typeof import('./src/components/result/asset.vue')['default']
     Assetmanage: typeof import('./src/components/assetmanage.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -36,6 +37,7 @@ declare module '@vue/runtime-core' {
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
+    Finalresult: typeof import('./src/components/result/finalresult.vue')['default']
     HomePage: typeof import('./src/components/HomePage.vue')['default']
     IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
     IconDocumentation: typeof import('./src/components/icons/IconDocumentation.vue')['default']
@@ -44,10 +46,13 @@ declare module '@vue/runtime-core' {
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
     Manage: typeof import('./src/components/manage.vue')['default']
     Menu: typeof import('./src/components/Menu.vue')['default']
+    Result: typeof import('./src/components/result.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Threaten: typeof import('./src/components/result/threaten.vue')['default']
     Threatenmanage: typeof import('./src/components/threatenmanage.vue')['default']
     UserLogout: typeof import('./src/components/UserLogout.vue')['default']
+    Vulner: typeof import('./src/components/result/vulner.vue')['default']
     Vulnermanage: typeof import('./src/components/vulnermanage.vue')['default']
   }
 }

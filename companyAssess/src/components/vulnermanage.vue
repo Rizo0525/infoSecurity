@@ -176,7 +176,7 @@ const handleAddComfirm = ()=>{
       }
     })
   }
-  // console.log("form",form);
+  console.log("form",form);
   // form.id = tableData.value[tableData.value.length-1].id+1
   // console.log(form.id);
   // console.log("tableData",tableData.value);

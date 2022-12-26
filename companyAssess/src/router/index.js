@@ -34,6 +34,10 @@ const router = createRouter({
           component:()=>import("../components/manage.vue")
         }
       ]
+    },
+    {
+      path:"/result",
+      component:()=>import("../components/result.vue")
     }
   ],
 });

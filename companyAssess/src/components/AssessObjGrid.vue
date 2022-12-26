@@ -208,9 +208,9 @@ const colborateForm = reactive({
   }
 })
 const addUserLevel = ()=>{
-  console.log(colborateForm.assessment.name);
-  console.log(colborateForm.level);
-  console.log(colborateForm.user.username);
+  // console.log(colborateForm.assessment.name);
+  // console.log(colborateForm.level);
+  // console.log(colborateForm.user.username);
   fetch(`/api/assessment/addMembers?name=${colborateForm.assessment.name}
   &username=${colborateForm.user.username}&memberlevel=${colborateForm.level}`,{
     method:'get',
@@ -231,13 +231,15 @@ const addUserLevel = ()=>{
           name:colborateForm.assessment.name
         }
       })
+      colborateForm.level = null
+      colborateForm.user.username = ''
     }
   })
 }
 const addUser = (scope)=>{
   // console.log(scope.row.assessment.name);
   colborateForm.assessment.name = scope.row.assessment.name
-  console.log(scope.row.assessment.id);
+  // console.log(scope.row.assessment.id);
   dialogFormVisible1.value = true
   fetch(`/api/permission/queryAllHelper?proid=${scope.row.assessment.id}`,{
     method:'get',
@@ -246,7 +248,7 @@ const addUser = (scope)=>{
     return res.json()
   }).then((res)=>{
     if(res.result==="请求成功"){
-      console.log(res.message);
+      // console.log(res.message);
       colborator.value = res.message
     }
   })
@@ -312,7 +314,7 @@ const handleEdit = (scope) => {
 }
 const handleSave = (scope)=>{
   // console.log(scope.row.assessment.name);
-  console.log(scope.row.assessment.id);
+  // console.log(scope.row.assessment.id);
 
   //存数据库
   fetch(`/api/assessment/alter?proid=${scope.row.assessment.id}&name=${scope.row.assessment.name}&note=${scope.row.assessment.note}`,{
@@ -405,6 +407,8 @@ fetch(url,{
   // console.log(tableData.value[0].level);
 
 })
+
+
 </script>
 
 <style scoped>

@@ -9,8 +9,8 @@
       >
     </div>
     <div class="rightBtn">
-      <el-button :icon="UploadFilled">上传文件</el-button>
-      <el-button :icon="EditPen">计算</el-button>
+      <el-button :icon="UploadFilled" @click="importExcel()">上传文件</el-button>
+      <el-button :icon="EditPen" @click="Compute()">计算</el-button>
     </div>
     <el-table :data="tableData" style="width: 100%" border>
       <el-table-column prop="id" label="资产序号"/>
@@ -190,7 +190,9 @@ const handleEdit = (scope) => {
   scope.row.showinput = true
   scope.row.showbtn = true
 }
-
+const Compute = ()=>{
+  router.push('/result')
+}
 const handleAdd = ()=>{
   if(proStore.level==1){
     alert("没有权限添加")
@@ -261,7 +263,7 @@ const handleSave = (scope)=>{
     method:'get',
     credentials: 'include',
   }).then((res)=>{
-    console.log(res);
+    // console.log(res);
     if(res.status===200){
       //提示保存成功
       scope.row.showinput = false
@@ -269,6 +271,9 @@ const handleSave = (scope)=>{
       // console.log("保存成功");
     }
   })
+}
+const importExcel = ()=>{
+
 }
 const handleDelete = (scope) => {
 
@@ -300,7 +305,7 @@ fetch(`/api/assets/queryAll?proid=${proStore.proId}`,{
 }).then((res)=>{
   tableData.value = res.message
   len.value = tableData.value.length
-  console.log(tableData.value);
+  // console.log(tableData.value);
 })
 </script>
 

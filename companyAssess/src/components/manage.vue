@@ -4,7 +4,6 @@
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
       <el-tab-pane label="资产管理" name="first">
         <assetmanage></assetmanage>
-
       </el-tab-pane>
       <el-tab-pane label="威胁性管理" name="second">
         <threatenmanage></threatenmanage>
