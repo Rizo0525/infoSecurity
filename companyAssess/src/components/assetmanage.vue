@@ -13,8 +13,8 @@
       <el-button :icon="EditPen">计算</el-button>
     </div>
     <el-table :data="tableData" style="width: 100%" border>
-      <el-table-column prop="id" label="资产序号" width="100"/>
-      <el-table-column  label="资产类型" width="100">
+      <el-table-column prop="id" label="资产序号"/>
+      <el-table-column  label="资产类型">
         <template #default="scope">
               <span v-show="scope.row.showinput">
                 <el-input v-model="scope.row.type"></el-input>
@@ -24,7 +24,7 @@
               </span>
         </template>
       </el-table-column>
-      <el-table-column label="资产名" width="100">
+      <el-table-column label="资产名">
         <template #default="scope">
               <span v-show="scope.row.showinput">
                 <el-input v-model="scope.row.name"></el-input>
@@ -32,7 +32,7 @@
           <span v-show="!scope.row.showinput">{{scope.row.name}}</span>
         </template>
       </el-table-column>
-      <el-table-column  label="资产拥有人" width="100">
+      <el-table-column  label="资产拥有人">
         <template #default="scope">
               <span v-show="scope.row.showinput">
                 <el-input v-model="scope.row.person"></el-input>
@@ -42,7 +42,7 @@
               </span>
         </template>
       </el-table-column>
-      <el-table-column  label="secrety" width="100">
+      <el-table-column  label="secrety">
         <template #default="scope">
               <span v-show="scope.row.showinput">
                 <el-input v-model="scope.row.secrety"></el-input>
@@ -52,7 +52,7 @@
               </span>
         </template>
       </el-table-column>
-      <el-table-column  label="wholeness" width="100">
+      <el-table-column  label="wholeness">
         <template #default="scope">
               <span v-show="scope.row.showinput">
                 <el-input v-model="scope.row.wholeness"></el-input>
@@ -62,7 +62,7 @@
               </span>
         </template>
       </el-table-column>
-      <el-table-column  label="availability" width="100">
+      <el-table-column  label="availability">
         <template #default="scope">
               <span v-show="scope.row.showinput">
                 <el-input v-model="scope.row.availability"></el-input>
@@ -72,7 +72,7 @@
               </span>
         </template>
       </el-table-column>
-      <el-table-column  label="importance" width="100">
+      <el-table-column  label="importance">
         <template #default="scope">
               <span v-show="scope.row.showinput">
                 <el-input v-model="scope.row.importance"></el-input>
@@ -82,7 +82,7 @@
               </span>
         </template>
       </el-table-column>
-      <el-table-column  label="note" width="100">
+      <el-table-column  label="note">
         <template #default="scope">
               <span v-show="scope.row.showinput">
                 <el-input v-model="scope.row.note"></el-input>
@@ -93,21 +93,23 @@
         </template>
       </el-table-column>
 
-      <el-table-column>
+      <el-table-column width="180">
         <template #header>
           <el-input v-model="search" size="small" placeholder="Type to search" />
         </template>
         <template #default="scope">
           <div v-show="!scope.row.showbtn">
-            <el-button size="small" @click="handleEdit(scope)"
+            <el-button size="small" @click="handleEdit(scope)" v-show="proStore.level===1?false:true"
             >Edit</el-button
             >
             <el-button
                 size="small"
                 type="danger"
                 @click="handleDelete(scope)"
+                v-show="proStore.level==3?true:false"
             >Delete</el-button
             >
+            <span v-show="proStore.level==1?true:false">不能进行任何操作</span>
           </div>
           <div v-show="scope.row.showbtn">
             <el-button size="small" type="danger" @click="handleSave(scope)">save</el-button>
@@ -190,47 +192,64 @@ const handleEdit = (scope) => {
 }
 
 const handleAdd = ()=>{
-  dialogFormVisible.value = true
+  if(proStore.level==1){
+    alert("没有权限添加")
+  }else{
+    dialogFormVisible.value = true
+  }
 }
 const handleAddComfirm = ()=>{
-  tableData.value.push({
-    id: tableData.value[tableData.value.length-1].id+1,
-    type:form.type,
-    name: form.name,
-    person:form.person,
-    note: form.note,
-    secrety:form.secrety,
-    wholeness:form.wholeness,
-    availability:form.availability,
-    importance:form.importance,
-    status: 0,
-    assessment:{}
-  })
 
-  // console.log("form",form);
-  // form.id = tableData.value[tableData.value.length-1].id+1
-  // console.log(form.id);
-  // console.log("tableData",tableData.value);
+    if(tableData.value.length===0){
+      tableData.value.push({
+        id: 1,
+        type:form.type,
+        name: form.name,
+        person:form.person,
+        note: form.note,
+        secrety:form.secrety,
+        wholeness:form.wholeness,
+        availability:form.availability,
+        importance:form.importance,
+        status: 0,
+        assessment:{}
+      })
+    }else{
+      tableData.value.push({
+        id: tableData.value[tableData.value.length-1].id+1,
+        type:form.type,
+        name: form.name,
+        person:form.person,
+        note: form.note,
+        secrety:form.secrety,
+        wholeness:form.wholeness,
+        availability:form.availability,
+        importance:form.importance,
+        status: 0,
+        assessment:{}
+      })
+    }
 
-  fetch(`/api/assets/add?type=${form.type}&name=${form.name}&person=${form.person}
+    fetch(`/api/assets/add?type=${form.type}&name=${form.name}&person=${form.person}
   &secrety=${form.secrety}&wholeness=${form.wholeness}&availability=${form.availability}
   &importance=${form.importance}&note=${form.note}&proid=${proStore.proId}`,{
-    method:'get',
-    credentials: 'include',
-  }).then((res)=>{
-    if(res.status===200){
-      // assetform.value.resetFields()
-      //提示添加成功
-      form.name = ''
-      form.note = ''
-      form.type = ''
-      form.person = ''
-      form.secrety = null
-      form.wholeness = null
-      form.availability = null
-      form.importance = null
-    }
-  })
+      method:'get',
+      credentials: 'include',
+    }).then((res)=>{
+      if(res.status===200){
+        // assetform.value.resetFields()
+        //提示添加成功
+        form.name = ''
+        form.note = ''
+        form.type = ''
+        form.person = ''
+        form.secrety = null
+        form.wholeness = null
+        form.availability = null
+        form.importance = null
+      }
+    })
+
 
 }
 const handleSave = (scope)=>{
@@ -281,7 +300,7 @@ fetch(`/api/assets/queryAll?proid=${proStore.proId}`,{
 }).then((res)=>{
   tableData.value = res.message
   len.value = tableData.value.length
-  // console.log(tableData.value);
+  console.log(tableData.value);
 })
 </script>
 

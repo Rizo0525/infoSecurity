@@ -9,7 +9,9 @@
       <el-tab-pane label="威胁性管理" name="second">
         <threatenmanage></threatenmanage>
       </el-tab-pane>
-      <el-tab-pane label="脆弱性管理" name="third">Role</el-tab-pane>
+      <el-tab-pane label="脆弱性管理" name="third">
+        <vulnermanage></vulnermanage>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -20,6 +22,7 @@ import {projectStore} from "../stores/project";
 const proStore = projectStore()
 import Assetmanage from "./assetmanage.vue";
 import Threatenmanage from './threatenmanage.vue'
+import Vulnermanage from './vulnermanage.vue'
 const activeName = ref('first')
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   // console.log(tab, event)

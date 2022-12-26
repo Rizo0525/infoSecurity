@@ -41,18 +41,19 @@
       </template>
       <template #default="scope">
           <div v-show="!scope.row.showbtn">
-            <el-button size="small" @click="handleEdit(scope)"
+            <el-button size="small" @click="handleEdit(scope)" v-show="scope.row.level===1?false:true"
             >Edit</el-button
             >
-            <el-button
+            <el-button v-show="scope.row.level==3?true:false"
                 size="small"
                 type="danger"
                 @click="handleDelete(scope)"
             >Delete</el-button
             >
-            <el-button size="small" @click="addUser(scope)"
-            >addUser</el-button
+            <el-button size="small" @click="addUser(scope)" v-show="scope.row.level==3?true:false"
+            >协作人管理</el-button
             >
+            <span v-show="scope.row.level==1?true:false">不能进行任何操作</span>
           </div>
 
           <div v-show="scope.row.showbtn">
@@ -83,6 +84,24 @@
       </span>
     </template>
   </el-dialog>
+  <el-dialog v-model="dialogFormVisible1" title="协作人管理">
+    <el-form :model="colborateForm">
+      <el-form-item label="评估对象名称" :label-width="formLabelWidth">
+        <el-input v-model="colborateForm.name" autocomplete="off" clearable/>
+      </el-form-item>
+      <el-form-item label="当前已有协作人" :label-width="formLabelWidth">
+        <el-input v-model="colborateForm.cob" clearable/>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible1 = false">Cancel</el-button>
+        <el-button type="primary" @click="dialogFormVisible1 = false,handleAddComfirm1()">
+          Confirm
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </div>
 
 </template>
@@ -98,12 +117,15 @@ const tableData = ref()
 const len = ref()
 const search = ref('')
 const dialogFormVisible = ref(false)
+const dialogFormVisible1 = ref(false)
+const optionshow = ref(false)
 const formLabelWidth = '140px'
 
 
 const JumpTo = (scope)=>{
   proStore.alterProjectId(scope.row.assessment.id)
   proStore.alterProjectname(scope.row.assessment.name)
+  proStore.alterProjectLevel(scope.row.level)
   console.log(scope.row.assessment.id);
   router.push('/content/manage')
   // proStore.alterProjectId(scope.row.assessment.id)
@@ -114,23 +136,52 @@ const form = reactive({
   note: '',
   state: 0
 })
+const colborateForm = reactive({
+  name:'',
+  cob:'',
+})
+const addUser = (scope)=>{
+  // console.log(scope.row.assessment.name);
+  colborateForm.name = scope.row.assessment.name
+  colborateForm.name
+  dialogFormVisible1.value = true
+}
 const handleAddComfirm = ()=>{
   // console.log(form.name);
-  tableData.value.push({
-    assessment:{
-      id:tableData.value[tableData.value.length-1].assessment.id+1,
-      name:form.name,
-      note:form.note,
-      state:form.state
-    },
-    id:tableData.value[tableData.value.length-1].id,
-    level:3,
-    status:0,
-    user:{
-      id:3,
-      username:"lan"
-    }
-  })
+
+  if(tableData.value.length===0){
+    tableData.value.push({
+      assessment:{
+        id:0,
+        name:form.name,
+        note:form.note,
+        state:form.state
+      },
+      id:tableData.value[tableData.value.length-1].id,
+      level:3,
+      status:0,
+      user:{
+        id:3,
+        username:"lan"
+      }
+    })
+  }else{
+    tableData.value.push({
+      assessment:{
+        id:tableData.value[tableData.value.length-1].assessment.id+1,
+        name:form.name,
+        note:form.note,
+        state:form.state
+      },
+      id:tableData.value[tableData.value.length-1].id,
+      level:3,
+      status:0,
+      user:{
+        id:3,
+        username:"lan"
+      }
+    })
+  }
 
 
   fetch(`/api/assessment/add?name=${form.name}&note=${form.note}`,{
@@ -209,6 +260,8 @@ fetch(url,{
   // console.log(tableData.value.length);
   len.value = tableData.value.length
   // console.log(tableData.value);
+  // console.log(tableData.value[0].level);
+
 })
 </script>
 

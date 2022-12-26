@@ -59,16 +59,19 @@
           <el-input v-model="search" size="small" placeholder="Type to search" />
         </template>
         <template #default="scope">
-          <div v-show="!scope.row.showbtn">
-            <el-button size="small" @click="handleEdit(scope)"
+         <div v-show="!scope.row.showbtn">
+            <el-button size="small" @click="handleEdit(scope)" v-show="proStore.level===1?false:true"
             >Edit</el-button
             >
             <el-button
                 size="small"
                 type="danger"
                 @click="handleDelete(scope)"
+                v-show="proStore.level==3?true:false"
             >Delete</el-button
             >
+            <span v-show="proStore.level==1?true:false">不能进行任何操作</span>
+
           </div>
           <div v-show="scope.row.showbtn">
             <el-button size="small" type="danger" @click="handleSave(scope)">save</el-button>
@@ -137,20 +140,39 @@ const handleEdit = (scope) => {
 }
 
 const handleAdd = ()=>{
-  dialogFormVisible.value = true
+  if(proStore.level==1){
+    alert("没有权限添加")
+  }else{
+    dialogFormVisible.value = true
+  }
 }
 const handleAddComfirm = ()=>{
-  tableData.value.push({
-    id: tableData.value[tableData.value.length-1].id+1,
-    type:form.type,
-    value: form.value,
-    note: form.note,
-    status: 0,
-    assessment:{},
-    assets:{
-      id:form.assets.id
-    }
-  })
+  if(tableData.value.length===0){
+    tableData.value.push({
+      id: 1,
+      type:form.type,
+      value: form.value,
+      note: form.note,
+      status: 0,
+      assessment:{},
+      assets:{
+        id:form.assets.id
+      }
+    })
+  }else{
+    tableData.value.push({
+      id: tableData.value[tableData.value.length-1].id+1,
+      type:form.type,
+      value: form.value,
+      note: form.note,
+      status: 0,
+      assessment:{},
+      assets:{
+        id:form.assets.id
+      }
+    })
+  }
+
 
   // console.log("form",form);
   // form.id = tableData.value[tableData.value.length-1].id+1
@@ -174,9 +196,10 @@ const handleAddComfirm = ()=>{
 
 }
 const handleSave = (scope)=>{
-  console.log(scope.row);
+  // console.log(scope.row.id);
+  // console.log(proStore.proId);
   //存数据库
-  fetch(`/api/threaten/alter?assetsid=${form.assets.id}&type=${form.type}&value=${form.value}&note=${form.note}
+  fetch(`/api/threaten/alter?threatenid=${scope.row.id}&type=${scope.row.type}&value=${scope.row.value}&note=${scope.row.note}
   &proid=${proStore.proId}`,{
     method:'get',
     credentials: 'include',
@@ -194,8 +217,7 @@ const handleDelete = (scope) => {
   console.log(scope.row.id);
   console.log(proStore.proId);
   //tableD
-  console.log(scope.row.id);
-  console.log(proStore.proId);
+  // console.log(proStore.proId);
   fetch(`/api/threaten/delete?threatenid=${scope.row.id}&proid=${proStore.proId}`,{
     method:'get',
     credentials: 'include',
