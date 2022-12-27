@@ -15,27 +15,8 @@
           :on-change="handleChange"
           action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
       >
-        <!--          :http-request="uploadFile"-->
-        <!--        v-model:file-list="fileList"-->
-<!--        action=`/api/assets/Upload`-->
-
-
       <el-button type="primary">Click to upload</el-button>
-<!--        <template #tip>-->
-<!--          <div class="el-upload__tip">-->
-<!--            jpg/png files with a size less than 500kb-->
-<!--          </div>-->
-<!--        </template>-->
       </el-upload>
-<!--      <el-upload class="upload-ctn" action="/asset/add" ref="upload"-->
-<!--                 :on-change="resolveFile(this.asset)" :with-credentials="true"-->
-<!--                 :before-upload="uploadAsset" :show-file-list="false" :auto-upload="false"-->
-<!--                 :http-request="reqAsset">-->
-<!--        <el-button class="home-btn" icon="el-icon-circle-plus-outline" plain slot="trigger"-->
-<!--                   type="primary">选取文件</el-button>-->
-<!--        <el-button class="home-btn" icon="el-icon-upload" plain type="success" @click="upAsset">-->
-<!--          上传</el-button>-->
-<!--      </el-upload>-->
       <el-button :icon="EditPen" @click="Compute()">计算</el-button>
 <!--      disabled="vStore.vullen===0||thrStore.threatenlen===0?true:false"-->
     </div>
@@ -193,8 +174,11 @@ import {ref, reactive, onMounted, nextTick} from "vue";
 import {projectStore} from "../stores/project";
 import {vulStore} from "../stores/vul";
 import {threatenStore} from "../stores/threaten";
-import {EditPen,UploadFilled} from "@element-plus/icons-vue"
+import {EditPen,UploadFilled} from "@element-plus/icons-vue";
 import {useRouter} from "vue-router";
+import * as d3 from 'd3'
+import * as XLSX from 'xlsx'
+
 import type { UploadProps, UploadUserFile } from 'element-plus'
 const router = useRouter()
 const proStore = projectStore()
@@ -205,8 +189,8 @@ console.log(thrStore.threatenlen);
 const dialogFormVisible = ref(false)
 const tableData = ref()
 const len = ref()
-const actionUrl: string = `https://localhost:3000/assets/Upload/proid=${proStore.proId}`
-console.log(actionUrl);
+// const actionUrl: string = `https://localhost:3000/assets/Upload/proid=${proStore.proId}`
+// console.log(actionUrl);
 const assetform = ref(null)
 const form = reactive({
   id: null,
@@ -221,25 +205,46 @@ const form = reactive({
   status: 0,
   assessment:{}
 })
-const uploadFile = (params)=>{
-  const _file = params.file
-  const formData = new FormData()
-  formData.append('file',_file)
-  // console.log(formData);
+const importExcel = (file) =>{
+  // let reader = new FileReader();
+  // reader.readAsBinaryString(file.raw);
+  //
+  // reader.onload = function (e) {
+  //   let data = e.target.result;
+  //   let workbook = XLSX.read(data, {
+  //     type: 'binary'
+  //   });
+  //
+  //   let result = null;
+  //   for (let name of workbook.SheetNames) {
+  //     if (name == tableName) {
+  //       result = XLSX.utils.sheet_to_json(workbook.Sheets[name]);
+  //     }
+  //   }
+  //   if (result == null) {
+  //     alert("表为空");
+  //   } else {
+  //     callback(result);
+  //   }
+  // };
 }
-// const fileList = ref<UploadUserFile[]>([
-//   {
-//     name: 'food.jpeg',
-//     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-//   },
-//   {
-//     name: 'food2.jpeg',
-//     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-//   },
-// ])
 const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
-  // fileList.value = fileList.value.slice(-3)
+  // console.log(document.getElementsByClassName("el-upload__input")[0].value);
   console.log(uploadFile, uploadFiles);
+  // const fileReader = new FileReader()
+  // fileReader.onload = ev => {
+  //   const workbook = XLSX.read(ev.target.result, {
+  //     type: "binary"
+  //   })
+  //   const wsname = workbook.SheetNames[0]
+  //   const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname])
+  //   console.log('ws:',ws) // 转换成json的数据
+  //   //  dealExcel(ws) ...对数据进行自己需要的操作
+  //   tableData.value = ws
+  // }
+  // fileReader.readAsBinaryString(uploadFile)
+
+  // importExcel(uploadFile)
 }
 
 const handleEdit = (scope) => {
@@ -258,7 +263,6 @@ const handleAdd = ()=>{
   }
 }
 const handleAddComfirm = ()=>{
-
     if(tableData.value.length===0){
       tableData.value.push({
         id: 1,
@@ -329,11 +333,7 @@ const handleSave = (scope)=>{
     }
   })
 }
-const importExcel = ()=>{
-
-}
 const handleDelete = (scope) => {
-
   //tableD
   // console.log(scope.row.id);
   // console.log(proStore.proId);
