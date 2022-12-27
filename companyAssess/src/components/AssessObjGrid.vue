@@ -255,16 +255,17 @@ const addUser = (scope)=>{
 }
 const handleAddComfirm = ()=>{
   // console.log(form.name);
-
+  console.log(tableData.value.length);
   if(tableData.value.length===0){
     tableData.value.push({
       assessment:{
         id:0,
         name:form.name,
         note:form.note,
-        state:form.state
+        state:form.state,
+        status:0
       },
-      id:tableData.value[tableData.value.length-1].id,
+      id:0,
       level:3,
       status:0,
       user:{
@@ -278,9 +279,10 @@ const handleAddComfirm = ()=>{
         id:tableData.value[tableData.value.length-1].assessment.id+1,
         name:form.name,
         note:form.note,
-        state:form.state
+        state:form.state,
+        status:0
       },
-      id:tableData.value[tableData.value.length-1].id,
+      id:tableData.value[tableData.value.length-1].id+1,
       level:3,
       status:0,
       user:{
@@ -299,6 +301,7 @@ const handleAddComfirm = ()=>{
       //提示添加成功
       form.name = ''
       form.note = ''
+      console.log("添加成功");
     }
   })
 
@@ -396,13 +399,15 @@ fetch(url,{
     return res.json()
   }
 }).then((res)=>{
+  if(res.message.length!=0){
+    tableData.value = res.message
+    len.value = tableData.value.length
+  }
   // console.log(res);
   // console.log(res.message);
   // tableData.value = reactive(res.message)
-  tableData.value = res.message
   // console.log(tableData.value);
   // console.log(tableData.value.length);
-  len.value = tableData.value.length
   // console.log(tableData.value);
   // console.log(tableData.value[0].level);
 })

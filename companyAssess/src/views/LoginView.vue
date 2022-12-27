@@ -52,13 +52,21 @@ export default {
         document.cookie = `password=${escape(value)};expires=${date.toGMTString()};path=/`
         console.log(document.cookie);
        */
-      console.log(document.cookie.trim().split(';')[1].trim().split("=")[1]);
+      document.cookie.trim().split(";").forEach((value,index)=>{
+        console.log(value.trim().split("="));
+        if(value.trim().split("=")[0]==='username'){
+          console.log(value.trim().split("=")[1]);
+          store.alterUserName(value.trim().split("=")[1])
+        }
+      })
+      // console.log();
+      // console.log(document.cookie.trim().split(';')[1].trim().split("=")[1]);
 
-      store.alterUserName(document.cookie.trim().split(';')[1].trim().split("=")[1])
+      // (document.cookie.trim().split(';')[1].trim().split("=")[1])
 
       router.push("/content")
-      console.log(document.cookie.trim().split(';')[0].split('=')[1]);
-      console.log(document.cookie.trim().split(';')[1].trim().split('=')[1]);
+      // console.log(document.cookie.trim().split(';')[0].split('=')[1]);
+      // console.log(document.cookie.trim().split(';')[1].trim().split('=')[1]);
     }
     return {store}
   },

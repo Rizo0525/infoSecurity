@@ -136,7 +136,7 @@
   </div>
   <el-dialog v-model="dialogFormVisible" title="添加单个资产对象">
     <el-form :model="form" ref="assetform">
-      <el-form-item label="数据类型" :label-width="formLabelWidth" prop="type">
+      <el-form-item label="资产类型" :label-width="formLabelWidth" prop="type">
         <el-input v-model="form.type" autocomplete="off" clearable/>
       </el-form-item>
       <el-form-item label="资产名称" :label-width="formLabelWidth" prop="name">
