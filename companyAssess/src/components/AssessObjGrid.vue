@@ -405,7 +405,6 @@ fetch(url,{
   len.value = tableData.value.length
   // console.log(tableData.value);
   // console.log(tableData.value[0].level);
-
 })
 
 

@@ -10,7 +10,7 @@
     </div>
     <div class="rightBtn">
       <el-button :icon="UploadFilled">上传文件</el-button>
-      <el-button :icon="EditPen">计算</el-button>
+      <el-button :icon="EditPen" disabled>计算</el-button>
     </div>
 
     <el-table :data="tableData" style="width: 100%" border>
@@ -113,10 +113,12 @@
 <script setup>
 import {ref, reactive, onMounted, nextTick} from "vue";
 import {projectStore} from "../stores/project";
+import {threatenStore} from "../stores/threaten";
 import {EditPen,UploadFilled} from "@element-plus/icons-vue"
 import {useRouter} from "vue-router";
 const router = useRouter()
 const proStore = projectStore()
+const thrStore = threatenStore()
 const dialogFormVisible = ref(false)
 const tableData = ref()
 const len = ref()
@@ -241,6 +243,7 @@ fetch(`/api/threaten/queryAll?proid=${proStore.proId}`,{
 }).then((res)=>{
   tableData.value = res.message
   len.value = tableData.value.length
+  thrStore.alterthreatenlen(tableData.value.length)
   console.log(tableData.value);
 })
 </script>

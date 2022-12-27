@@ -13,10 +13,12 @@
       <el-upload
           class="upload-demo"
           :on-change="handleChange"
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
       >
-<!--        v-model:file-list="fileList"-->
+        <!--          :http-request="uploadFile"-->
+        <!--        v-model:file-list="fileList"-->
+<!--        action=`/api/assets/Upload`-->
 
-        <!--          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"-->
 
       <el-button type="primary">Click to upload</el-button>
 <!--        <template #tip>-->
@@ -25,7 +27,17 @@
 <!--          </div>-->
 <!--        </template>-->
       </el-upload>
+<!--      <el-upload class="upload-ctn" action="/asset/add" ref="upload"-->
+<!--                 :on-change="resolveFile(this.asset)" :with-credentials="true"-->
+<!--                 :before-upload="uploadAsset" :show-file-list="false" :auto-upload="false"-->
+<!--                 :http-request="reqAsset">-->
+<!--        <el-button class="home-btn" icon="el-icon-circle-plus-outline" plain slot="trigger"-->
+<!--                   type="primary">选取文件</el-button>-->
+<!--        <el-button class="home-btn" icon="el-icon-upload" plain type="success" @click="upAsset">-->
+<!--          上传</el-button>-->
+<!--      </el-upload>-->
       <el-button :icon="EditPen" @click="Compute()">计算</el-button>
+<!--      disabled="vStore.vullen===0||thrStore.threatenlen===0?true:false"-->
     </div>
     <el-table :data="tableData" style="width: 100%" border>
       <el-table-column prop="id" label="资产序号"/>
@@ -179,14 +191,22 @@
 
 import {ref, reactive, onMounted, nextTick} from "vue";
 import {projectStore} from "../stores/project";
+import {vulStore} from "../stores/vul";
+import {threatenStore} from "../stores/threaten";
 import {EditPen,UploadFilled} from "@element-plus/icons-vue"
 import {useRouter} from "vue-router";
 import type { UploadProps, UploadUserFile } from 'element-plus'
 const router = useRouter()
 const proStore = projectStore()
+const vStore = vulStore()
+const thrStore = threatenStore()
+console.log(vStore.vullen);
+console.log(thrStore.threatenlen);
 const dialogFormVisible = ref(false)
 const tableData = ref()
 const len = ref()
+const actionUrl: string = `https://localhost:3000/assets/Upload/proid=${proStore.proId}`
+console.log(actionUrl);
 const assetform = ref(null)
 const form = reactive({
   id: null,
@@ -201,7 +221,12 @@ const form = reactive({
   status: 0,
   assessment:{}
 })
-
+const uploadFile = (params)=>{
+  const _file = params.file
+  const formData = new FormData()
+  formData.append('file',_file)
+  // console.log(formData);
+}
 // const fileList = ref<UploadUserFile[]>([
 //   {
 //     name: 'food.jpeg',
@@ -216,6 +241,7 @@ const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
   // fileList.value = fileList.value.slice(-3)
   console.log(uploadFile, uploadFiles);
 }
+
 const handleEdit = (scope) => {
   //出现input框
   scope.row.showinput = true
@@ -346,8 +372,15 @@ fetch(`/api/assets/queryAll?proid=${proStore.proId}`,{
 }
 .rightBtn{
   float: right;
+  display: flex;
+  width: 440px;
+  align-items: center;
+  justify-content: space-between;
 }
 .el-pagination{
+  float: right;
+}
+.el-upload{
   float: right;
 }
 </style>
