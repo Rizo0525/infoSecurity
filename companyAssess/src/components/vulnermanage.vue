@@ -9,7 +9,7 @@
       >
     </div>
     <div class="rightBtn">
-      <el-button :icon="UploadFilled">上传文件</el-button>
+<!--      <el-button :icon="UploadFilled">上传文件</el-button>-->
       <el-button :icon="EditPen" disabled>计算</el-button>
     </div>
     <el-table :data="tableData" style="width: 100%" border>
