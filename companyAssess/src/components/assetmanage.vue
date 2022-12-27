@@ -10,13 +10,17 @@
     </div>
     <div class="rightBtn">
 <!--      <el-button :icon="UploadFilled" @click="importExcel()">上传文件</el-button>-->
-      <el-upload
-          class="upload-demo"
-          :on-change="handleChange"
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-      >
-      <el-button type="primary">Click to upload</el-button>
-      </el-upload>
+<!--      <el-upload-->
+<!--          class="upload-demo"-->
+<!--          :on-change="handleChange"-->
+<!--          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"-->
+<!--      >-->
+<!--      <el-button type="primary">Click to upload</el-button>-->
+<!--      </el-upload>-->
+      <form>
+        <input type="file" name="file"/>
+        <input type="submit" id="submit" value="上传" @click="importExcel()">
+      </form>
       <el-button :icon="EditPen" @click="Compute()">计算</el-button>
 <!--      disabled="vStore.vullen===0||thrStore.threatenlen===0?true:false"-->
     </div>
@@ -205,29 +209,7 @@ const form = reactive({
   status: 0,
   assessment:{}
 })
-const importExcel = (file) =>{
-  // let reader = new FileReader();
-  // reader.readAsBinaryString(file.raw);
-  //
-  // reader.onload = function (e) {
-  //   let data = e.target.result;
-  //   let workbook = XLSX.read(data, {
-  //     type: 'binary'
-  //   });
-  //
-  //   let result = null;
-  //   for (let name of workbook.SheetNames) {
-  //     if (name == tableName) {
-  //       result = XLSX.utils.sheet_to_json(workbook.Sheets[name]);
-  //     }
-  //   }
-  //   if (result == null) {
-  //     alert("表为空");
-  //   } else {
-  //     callback(result);
-  //   }
-  // };
-}
+
 const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
   // console.log(document.getElementsByClassName("el-upload__input")[0].value);
   console.log(uploadFile, uploadFiles);
@@ -261,6 +243,12 @@ const handleAdd = ()=>{
   }else{
     dialogFormVisible.value = true
   }
+}
+const importExcel = ()=>{
+  let xhr = new XMLHttpRequest();
+  let formData= new FormData(document.querySelector('form'));
+  xhr.open("POST",`/api/assets/Upload?proid=${proStore.proId}`);
+  xhr.send(formData);
 }
 const handleAddComfirm = ()=>{
     if(tableData.value.length===0){
