@@ -9,7 +9,22 @@
       >
     </div>
     <div class="rightBtn">
-      <el-button :icon="UploadFilled" @click="importExcel()">上传文件</el-button>
+<!--      <el-button :icon="UploadFilled" @click="importExcel()">上传文件</el-button>-->
+      <el-upload
+          class="upload-demo"
+          :on-change="handleChange"
+      >
+<!--        v-model:file-list="fileList"-->
+
+        <!--          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"-->
+
+      <el-button type="primary">Click to upload</el-button>
+<!--        <template #tip>-->
+<!--          <div class="el-upload__tip">-->
+<!--            jpg/png files with a size less than 500kb-->
+<!--          </div>-->
+<!--        </template>-->
+      </el-upload>
       <el-button :icon="EditPen" @click="Compute()">计算</el-button>
     </div>
     <el-table :data="tableData" style="width: 100%" border>
@@ -160,12 +175,13 @@
   </el-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import {ref, reactive, onMounted, nextTick} from "vue";
 import {projectStore} from "../stores/project";
 import {EditPen,UploadFilled} from "@element-plus/icons-vue"
 import {useRouter} from "vue-router";
+import type { UploadProps, UploadUserFile } from 'element-plus'
 const router = useRouter()
 const proStore = projectStore()
 const dialogFormVisible = ref(false)
@@ -185,6 +201,21 @@ const form = reactive({
   status: 0,
   assessment:{}
 })
+
+// const fileList = ref<UploadUserFile[]>([
+//   {
+//     name: 'food.jpeg',
+//     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+//   },
+//   {
+//     name: 'food2.jpeg',
+//     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+//   },
+// ])
+const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
+  // fileList.value = fileList.value.slice(-3)
+  console.log(uploadFile, uploadFiles);
+}
 const handleEdit = (scope) => {
   //出现input框
   scope.row.showinput = true
