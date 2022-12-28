@@ -120,7 +120,7 @@ const router = useRouter()
 const proStore = projectStore()
 const thrStore = threatenStore()
 const dialogFormVisible = ref(false)
-const tableData = ref()
+const tableData = ref([])
 const len = ref()
 const form = reactive({
   id: null,
@@ -235,16 +235,20 @@ const handleCancel = (scope)=>{
   scope.row.showinput = false
   scope.row.showbtn = false
 }
-fetch(`/api/threaten/queryAll?proid=${proStore.proId}`,{
-  method:'get',
-  credentials: 'include',
-}).then((res)=>{
-  return res.json()
-}).then((res)=>{
-  tableData.value = res.message
-  len.value = tableData.value.length
-  thrStore.alterthreatenlen(tableData.value.length)
-  console.log(tableData.value);
+onMounted(()=>{
+  fetch(`/api/threaten/queryAll?proid=${proStore.proId}`,{
+    method:'get',
+    credentials: 'include',
+  }).then((res)=>{
+    return res.json()
+  }).then((res)=>{
+    if(res.message.length!=0){
+      tableData.value = res.message
+      len.value = tableData.value.length
+      thrStore.alterthreatenlen(tableData.value.length)
+    }
+    console.log(tableData.value);
+  })
 })
 </script>
 

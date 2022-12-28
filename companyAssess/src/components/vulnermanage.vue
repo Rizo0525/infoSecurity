@@ -5,7 +5,7 @@
           type="primary"
           @click="handleAdd()"
           style="margin-bottom: 10px"
-      >添加单个威胁</el-button
+      >添加单个脆弱性</el-button
       >
     </div>
     <div class="rightBtn">
@@ -90,10 +90,10 @@
       <el-form-item label="威胁序号" :label-width="formLabelWidth" prop="assets.id">
         <el-input v-model="form.threaten.id" autocomplete="off" clearable/>
       </el-form-item>
-      <el-form-item label="威胁类型" :label-width="formLabelWidth" prop="type">
+      <el-form-item label="脆弱性类型" :label-width="formLabelWidth" prop="type">
         <el-input v-model="form.type" autocomplete="off" clearable/>
       </el-form-item>
-      <el-form-item label="威胁值" :label-width="formLabelWidth" prop="value">
+      <el-form-item label="脆弱值" :label-width="formLabelWidth" prop="value">
         <el-input v-model="form.value" autocomplete="off" clearable/>
       </el-form-item>
 
@@ -113,14 +113,13 @@
 import {ref, reactive, onMounted, nextTick} from "vue";
 import {projectStore} from "../stores/project";
 import {vulStore} from "../stores/vul";
-
 import {EditPen,UploadFilled} from "@element-plus/icons-vue"
 import {useRouter} from "vue-router";
 const router = useRouter()
 const proStore = projectStore()
 const vStore = vulStore()
 const dialogFormVisible = ref(false)
-const tableData = ref()
+const tableData = ref([])
 const len = ref()
 const assetform = ref(null)
 const form = reactive({
@@ -241,17 +240,21 @@ const handleCancel = (scope)=>{
   scope.row.showinput = false
   scope.row.showbtn = false
 }
-fetch(`/api/vulnerable/queryAll?proid=${proStore.proId}`,{
-  method:'get',
-  credentials: 'include',
-}).then((res)=>{
-  return res.json()
-}).then((res)=>{
-  tableData.value = res.message
-  len.value = tableData.value.length
-  vStore.altervullen(tableData.value.length)
-  // console.log(vStore.vullen);
-  console.log(tableData.value);
+onMounted(()=>{
+  fetch(`/api/vulnerable/queryAll?proid=${proStore.proId}`,{
+    method:'get',
+    credentials: 'include',
+  }).then((res)=>{
+    return res.json()
+  }).then((res)=>{
+    if(res.message.length!=0){
+      tableData.value = res.message
+      len.value = tableData.value.length
+      vStore.altervullen(tableData.value.length)
+      // console.log(vStore.vullen);
+    }
+    console.log(tableData.value);
+  })
 })
 </script>
 

@@ -191,7 +191,7 @@ const thrStore = threatenStore()
 console.log(vStore.vullen);
 console.log(thrStore.threatenlen);
 const dialogFormVisible = ref(false)
-const tableData = ref()
+const tableData = ref([])
 const len = ref()
 // const actionUrl: string = `https://localhost:3000/assets/Upload/proid=${proStore.proId}`
 // console.log(actionUrl);
@@ -342,14 +342,17 @@ const handleCancel = (scope)=>{
   scope.row.showinput = false
   scope.row.showbtn = false
 }
+onMounted(()=>{})
 fetch(`/api/assets/queryAll?proid=${proStore.proId}`,{
   method:'get',
   credentials: 'include',
 }).then((res)=>{
   return res.json()
 }).then((res)=>{
-  tableData.value = res.message
-  len.value = tableData.value.length
+  if(res.message.length != 0){
+    tableData.value = res.message
+    len.value = tableData.value.length
+  }
   // console.log(tableData.value);
 })
 </script>

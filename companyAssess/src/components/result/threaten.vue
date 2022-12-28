@@ -28,20 +28,21 @@
 </template>
 
 <script setup>
-import {ref, reactive} from "vue";
+import {ref, reactive, onMounted} from "vue";
 import {projectStore} from "../../stores/project";
 const proStore = projectStore()
 const tableData = ref()
 
-fetch(`/api/threaten/queryAll?proid=${proStore.proId}`,{
-  method:'get',
-  credentials: 'include',
-}).then((res)=>{
-  return res.json()
-}).then((res)=>{
-  tableData.value = res.message
-  // len.value = tableData.value.length
-  // console.log(tableData.value);
+onMounted(()=>{
+  fetch(`/api/threaten/queryAll?proid=${proStore.proId}`,{
+    method:'get',
+    credentials: 'include',
+  }).then((res)=>{
+    return res.json()
+  }).then((res)=>{
+    tableData.value = res.message
+
+  })
 })
 </script>
 

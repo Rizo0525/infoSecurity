@@ -101,6 +101,7 @@ export default {
         fetch(url,{
           method:'get'
         }).then((res)=>{
+          console.log(res);
           if(res.status===200){
             let date = new Date()
             date.setDate(date.getDate()+7)

@@ -24,7 +24,7 @@ export default {
       document.cookie = `username=${escape(value)};expires=${date.toGMTString()};path=/`
       document.cookie = `password=${escape(value)};expires=${date.toGMTString()};path=/`
       document.cookie = `NSESSIONID=${escape(value)};expires=${date.toGMTString()};path=/`
-
+      store.alterUserName("")
       this.$router.push("/login")
     }
   }

@@ -165,13 +165,13 @@
 </template>
 
 <script lang="ts" setup>
-import {reactive,ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {projectStore} from "../stores/project";
 import {useRouter} from "vue-router";
 
 const proStore = projectStore()
 const router = useRouter()
-const tableData = ref()
+const tableData = ref([])
 const colborator = ref()
 const len = ref()
 const search = ref('')
@@ -255,17 +255,18 @@ const addUser = (scope)=>{
 }
 const handleAddComfirm = ()=>{
   // console.log(form.name);
+  console.log(tableData.value);
   console.log(tableData.value.length);
   if(tableData.value.length===0){
     tableData.value.push({
       assessment:{
-        id:0,
+        id:1,
         name:form.name,
         note:form.note,
         state:form.state,
         status:0
       },
-      id:0,
+      id:1,
       level:3,
       status:0,
       user:{
@@ -297,6 +298,7 @@ const handleAddComfirm = ()=>{
     method:'get',
     credentials: 'include',
   }).then((res)=>{
+    console.log(res);
     if(res.status===200){
       //提示添加成功
       form.name = ''
@@ -388,28 +390,30 @@ const handleCancel1 = (scope)=>{
 const handleAdd = ()=>{
   dialogFormVisible.value = true
 }
-let url = `/api/permission/queryAll`
-fetch(url,{
-  method:'get',
-  credentials: 'include',
-}).then((res)=>{
-  if(res.status===200){
-    // console.log(res.json());
-    // console.log(JSON.stringify(res.text()));
-    return res.json()
-  }
-}).then((res)=>{
-  if(res.message.length!=0){
-    tableData.value = res.message
-    len.value = tableData.value.length
-  }
-  // console.log(res);
-  // console.log(res.message);
-  // tableData.value = reactive(res.message)
-  // console.log(tableData.value);
-  // console.log(tableData.value.length);
-  // console.log(tableData.value);
-  // console.log(tableData.value[0].level);
+onMounted(()=>{
+  let url = `/api/permission/queryAll`
+  fetch(url,{
+    method:'get',
+    credentials: 'include',
+  }).then((res)=>{
+    if(res.status===200){
+      // console.log(res.json());
+      // console.log(JSON.stringify(res.text()));
+      return res.json()
+    }
+  }).then((res)=>{
+    if(res.result==="请求成功"){
+      // alert("请求成功")
+      if(res.message.length!=0){
+        tableData.value = res.message
+        len.value = tableData.value.length
+      }
+    }else if(res.result==="网络错误"){
+      alert("网络错误")
+    }
+    console.log(res);
+
+  })
 })
 
 
