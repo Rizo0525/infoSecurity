@@ -326,6 +326,7 @@ const handleSave = (scope)=>{
     method:'get',
     credentials: 'include',
   }).then((res)=>{
+    console.log(res);
     if(res.status===200){
       //提示保存成功
       scope.row.showinput = false

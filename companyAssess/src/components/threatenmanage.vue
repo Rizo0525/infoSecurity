@@ -67,7 +67,7 @@
                 size="small"
                 type="danger"
                 @click="handleDelete(scope)"
-                v-show="proStore.level==3?true:false"
+                v-show="proStore.level==1?false:true"
             >Delete</el-button
             >
             <span v-show="proStore.level==1?true:false">不能进行任何操作</span>

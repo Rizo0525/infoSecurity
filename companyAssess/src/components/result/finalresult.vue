@@ -52,6 +52,7 @@
       </el-table>
     </div>
     <div class="myChart"></div>
+    <div class="myChart1"></div>
   </div>
 </template>
 
@@ -78,6 +79,10 @@ onMounted(()=>{
       { value: 0, name: '高风险' },
       { value: 0, name: '极高风险' },
     ]
+    let risk = [
+      {value:0,name:"可接受风险"},
+      {value:0,name:"不可接受风险"}
+    ]
     tableData.value.forEach((value,index)=>{
       if(value.grade === 1){
         riskdata[0].value +=1
@@ -93,6 +98,11 @@ onMounted(()=>{
       }
       else if(value.grade === 5){
         riskdata[4].value +=1
+      }
+      if(value.grade>=3){
+        risk[1].value +=1
+      }else if(value.grade<3){
+        risk[0].value +=1
       }
     })
     let myChart = echarts.init(document.querySelector(".myChart"))
@@ -127,6 +137,36 @@ onMounted(()=>{
       ]
     };
     option && myChart.setOption(option);
+    let myChart1 = echarts.init(document.querySelector(".myChart1"))
+    let option1 = {
+      title: {
+        text: '风险接受类型',
+        left: 'center'
+      },
+      tooltip: {
+        trigger: 'item'
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left'
+      },
+      series: [
+        {
+          name: '风险接受类型',
+          type: 'pie',
+          radius: '50%',
+          data: risk,
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }
+      ]
+    };
+    option1 && myChart1.setOption(option1);
   })
 })
 
@@ -146,5 +186,10 @@ onMounted(()=>{
   width: 800px;
   height: 400px;
   margin: 0 auto;
+}
+.myChart1{
+  width: 800px;
+  height: 400px;
+  margin: 20px auto;
 }
 </style>
